@@ -13,6 +13,7 @@ You will be able to add or delete your personal earnings and expenses, the syste
 - JavaScript
 
 ## What i learned with this project
-- WebBrowser.
+- WebBrowser
+- Responsiveness
 - Better use of DOM javascript selectors
 - How to create a modal
