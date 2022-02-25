@@ -7,30 +7,19 @@ const Modal = {
     }
 }
 
-const Transaction = {
-    all: [
-        {
-            description: 'Luz',
-            amount: -50001,
-            date: '23/01/2021',
-        },
-        {
-            description: 'Website',
-            amount: 500000,
-            date: '23/01/2021',
-        },
-        {
-            description: 'Internet',
-            amount: -20012,
-            date: '23/01/2021',
-        },
-        {
-            description: 'App',
-            amount: 200000,
-            date: '23/01/2021',
-        },
+const Storage = {
+    get() {
+        return JSON.parse(localStorage.getItem('dev.finances:transactions')) || [];
+    },
 
-    ],
+    set(transactions) {
+        localStorage.setItem("dev.finances:transactions", JSON.stringify(transactions));
+    }
+}
+
+const Transaction = {
+
+    all: Storage.get(),
 
     add(transaction) {
         Transaction.all.push(transaction);
@@ -111,16 +100,17 @@ const DOM = {
     }
 }
 
+
+
 const Utils = {
     formatAmount(value) {
-        value = Number(value) * 100;
+        value = Number(value.replace(/\,\./g, "")) * 100;
         return value;
     },
 
     formatDate(date) {
-
-        const spittedDate = date.split("-");
-        return `${spittedDate[2] / spittedDate[1] / spittedDate[0]}`
+        const splittedDate = date.split("-");
+        return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`;
     },
 
     formatCurrency(value) {
@@ -143,6 +133,7 @@ const Form = {
     amount: document.querySelector('input#amount'),
 
     getValues() {
+
         return {
             description: Form.description.value,
             amount: Form.amount.value,
@@ -157,7 +148,6 @@ const Form = {
             throw new Error("Preencha todos os campos");
         }
 
-        console.log(description);
     },
 
     formatValues() {
@@ -204,6 +194,8 @@ const App = {
         });
 
         DOM.updateBalance();
+
+        Storage.set(Transaction.all);
     },
 
     reload() {
